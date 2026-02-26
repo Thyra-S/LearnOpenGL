@@ -1,0 +1,19 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="correctdependencies" />
+    <BuildType Name="Debug" />
+    <BuildType Name="Release" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="05CoordSystem/05CoordSystem.vcxproj" Id="fee60f31-b0c9-4140-926e-fab1aced8aa3">
+    <BuildType Solution="correctdependencies|*" Project="Release" />
+  </Project>
+  <Project Path="Camera/Camera.vcxproj" Id="d3a2fda2-1631-4752-a288-bc9bf7ea457b">
+    <BuildType Solution="correctdependencies|*" Project="Release" />
+  </Project>
+  <Project Path="CreateWindow/CreateWindow.vcxproj" Id="7bf6d24f-0df4-463d-8c25-fb7f29066e1c" />
+  <Project Path="Shaders/Shaders.vcxproj" Id="ce4c1580-61d1-4292-a49a-f33d82345786" />
+  <Project Path="Textures/Textures.vcxproj" Id="739a930d-7549-48c5-9aaf-34fbb612cd99" />
+  <Project Path="Transformations/Transformations.vcxproj" Id="44408b5e-4c98-4a4c-a408-9f8e362ef2f2" />
+</Solution>
