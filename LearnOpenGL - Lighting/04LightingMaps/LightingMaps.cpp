@@ -17,6 +17,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
+unsigned int loadTexture(const char* path);
 
 // settings
 const unsigned int SCR_WIDTH = 1600;
@@ -34,13 +35,6 @@ float lastFrame = 0.0f;
 
 // lighting
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
-
-struct Material {
-    glm::vec3 ambient;
-    glm::vec3 diffuse;
-    glm::vec3 specular;
-    float shininess;
-};
 
 int main()
 {
@@ -88,78 +82,49 @@ int main()
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
     float vertices[] = {
-	//Positions           // Normals
-    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-     0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-    -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+        // positions          // normals           // texture coords
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
 
-    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-     0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-     0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-     0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-    -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
 
-    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-    -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-    -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
 
-     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-     0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-     0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
 
-    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-     0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-     0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-     0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
 
-    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-     0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-    -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
     };
-
-    Material materialValues[] = {
-    { glm::vec3(0.0215,0.1745,0.0215) ,glm::vec3(0.07568,0.61424,0.07568),glm::vec3(0.633,0.727811,0.633) ,0.6}, //emerald
-    { glm::vec3(0.135,0.2225,0.1575) ,glm::vec3(0.54,0.89,0.63) ,glm::vec3(0.316228,0.316228,0.316228),0.1}, //jade
-    { glm::vec3(0.05375,0.05,0.06625) ,glm::vec3(0.18275,0.17,0.22525) ,glm::vec3(0.332741,0.328634,0.346435),0.3}, //obsidian
-    { glm::vec3(0.25,0.20725,0.20725) ,glm::vec3(1,0.829,0.829) ,glm::vec3(0.296648,0.296648,0.296648),0.088}, //pearl
-    { glm::vec3(0.1745,0.01175,0.01175),glm::vec3(0.61424,0.04136,0.04136),glm::vec3(0.727811,0.626959,0.626959),0.6}, //ruby
-    { glm::vec3(0.1,0.18725,0.1745) ,glm::vec3(0.396,0.74151,0.69102) ,glm::vec3(0.297254,0.30829,0.306678) ,0.1}, //turquoise
-    { glm::vec3(0.329412,0.223529,0.027451),glm::vec3(0.780392,0.568627,0.113725), glm::vec3(0.992157,0.941176,0.807843),0.21794872}, //brass
-    { glm::vec3(0.2125,0.1275,0.054), glm::vec3(0.714,0.4284,0.18144) ,glm::vec3(0.393548,0.271906,0.166721), 0.2}, //bronze
-    { glm::vec3(0.25,0.25,0.25) ,glm::vec3(0.4,0.4,0.4) ,glm::vec3(0.774597,0.774597,0.774597), 0.6}, //chrome
-    { glm::vec3(0.19125,0.0735,0.0225) ,glm::vec3(0.7038,0.27048,0.0828) ,glm::vec3(0.256777,0.137622,0.086014),0.1}, //copper
-    { glm::vec3(0.24725,0.1995,0.0745) ,glm::vec3(0.75164,0.60648,0.22648) ,glm::vec3(0.628281,0.555802,0.366065),0.4}, //gold
-    { glm::vec3(0.19225,0.19225,0.19225),glm::vec3(0.50754,0.50754,0.50754) ,glm::vec3(0.508273,0.508273,0.508273),0.4}, //silver
-    { glm::vec3(0.0,0.0,0.0) ,glm::vec3(0.01,0.01,0.01) ,glm::vec3(0.50,0.50,0.50), .25 }, //black plastic
-    { glm::vec3(0.0,0.1,0.06) ,glm::vec3(0.0,0.50980392,0.50980392),glm::vec3(0.50196078,0.50196078,0.50196078), .25}, //cyan plastic
-    { glm::vec3(0.0,0.0,0.0) ,glm::vec3(0.1 ,0.35,0.1) ,glm::vec3(0.45,0.55,0.45),.25 }, //green plastic
-    { glm::vec3(0.0,0.0,0.0) ,glm::vec3(0.5 ,0.0,0.0) ,glm::vec3(0.7,0.6 ,0.6),.25 }, //red plastic
-    { glm::vec3(0.0,0.0,0.0) ,glm::vec3(0.55 ,0.55,0.55) ,glm::vec3(0.70,0.70,0.70),.25 }, //white plastic
-    { glm::vec3(0.0,0.0,0.0) ,glm::vec3(0.5 ,0.5,0.0) ,glm::vec3(0.60,0.60,0.50),.25 }, //yellow plastic
-    { glm::vec3(0.02,0.02,0.02) ,glm::vec3(0.01,0.01,0.01) ,glm::vec3(0.4,0.4 ,0.4),.078125}, //black rubber
-    { glm::vec3(0.0,0.05,0.05) ,glm::vec3(0.4 ,0.5,0.5) ,glm::vec3(0.04,0.7,0.7) ,.078125}, //cyan rubber
-    { glm::vec3(0.0,0.05,0.0) ,glm::vec3(0.4 ,0.5,0.4) ,glm::vec3(0.04,0.7,0.04) ,.078125}, //green rubber
-    { glm::vec3(0.05,0.0,0.0) ,glm::vec3(0.5 ,0.4,0.4) ,glm::vec3(0.7,0.04,0.04) ,.078125}, //red rubber
-    { glm::vec3(0.05,0.05,0.05) ,glm::vec3(0.5,0.5,0.5) ,glm::vec3(0.7,0.7,0.7) ,.078125}, //white rubber
-    { glm::vec3(0.05,0.05,0.0) ,glm::vec3(0.5,0.5,0.4) ,glm::vec3(0.7,0.7,0.04) ,.078125 } //yellow rubber
-    };
-
-
 
     // first, configure the cube's VAO (and VBO)
     unsigned int VBO, cubeVAO;
@@ -172,11 +137,14 @@ int main()
     glBindVertexArray(cubeVAO);
 
     // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 	// normal attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+    // texture coords attribute
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
     // second, configure the light's VAO (VBO stays the same; the vertices are the same for the light object which is also a 3D cube)
     unsigned int lightCubeVAO;
@@ -186,13 +154,12 @@ int main()
     // we only need to bind to the VBO (to link it with glVertexAttribPointer), no need to fill it; the VBO's data already contains all we need (it's already bound, but we do it again for educational purposes)
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
         
-
-    // tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
-    // -------------------------------------------------------------------------------------------
-
+    // load textures
+    // ------------------------------------------------------
+    unsigned int diffuseMap = loadTexture("container2.png");
 
     // render loop
     // -----------
@@ -214,53 +181,52 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // activate shader
-        // set light color
-        glm::vec3 lightColor;
-        lightColor.x = sin(glfwGetTime() * 2.0f) * 0.5f + 0.5f;
-        lightColor.y = sin(glfwGetTime() * 0.7f) * 0.5f + 0.5f;
-        lightColor.z = sin(glfwGetTime() * 1.3f) * 0.5f + 0.5f;
+        lightingShader.use();
+        lightingShader.setVec3("light.position", lightPos);
+        lightingShader.setVec3("viewPos", camera.Position);
 
-        glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
-        glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
+        // light properties
+        glm::vec3 lightColor;
+        lightColor.x = static_cast<float>(sin(glfwGetTime() * 2.0));
+        lightColor.y = static_cast<float>(sin(glfwGetTime() * 0.7));
+        lightColor.z = static_cast<float>(sin(glfwGetTime() * 1.3));
+        glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f); // decrease the influence
+        glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
+        lightingShader.setVec3("light.ambient", ambientColor);
+        lightingShader.setVec3("light.diffuse", diffuseColor);
+        lightingShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+        
+        // material properties
+        lightingShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
+        lightingShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+        lightingShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f); // specular lighting doesn't have full effect on this object's material
+        lightingShader.setFloat("material.shininess", 32.0f);
 
         // view/projection transformations
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         glm::mat4 view = camera.GetViewMatrix();
-        lightingShader.use();
         lightingShader.setMat4("projection", projection);
         lightingShader.setMat4("view", view);
-        lightingShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-        lightingShader.setVec3("viewPos", camera.Position);
-        lightingShader.setVec3("light.position", lightPos);
-        lightingShader.setVec3("light.ambient", ambientColor);
-        lightingShader.setVec3("light.diffuse", diffuseColor); // darken diffuse light a bit
-        lightingShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-        // be sure to activate shader when setting uniforms/drawing objects
-        for (int i = 0; i < 24; i++) {
-            lightingShader.setVec3("material.ambient", materialValues[i].ambient);
-            lightingShader.setVec3("material.diffuse", materialValues[i].diffuse);
-            lightingShader.setVec3("material.specular", materialValues[i].specular);
-            lightingShader.setFloat("material.shininess", materialValues[i].shininess * 128);
 
-            // world transformation
-            glm::mat4 model = glm::mat4(1.0f);
-            float xPos = (i%6 - (6 / 2.0f)) * 2.0f;
-            float yPos = (i/6 - (4 / 2.0f)) * 2.0f;
+        // world transformation
+        glm::mat4 model = glm::mat4(1.0f);
+        lightingShader.setMat4("model", model);
 
-            model = glm::translate(model, glm::vec3(xPos, yPos, 0.0f));
-            lightingShader.setMat4("model", model);
 
-            // render the cube
-            glBindVertexArray(cubeVAO);
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-        }
+        lightingShader.setInt("material.diffuse", 0);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, diffuseMap);
+
+        // render the cube
+        glBindVertexArray(cubeVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);     
 
         // also draw the lamp object
         lightCubeShader.use();
         lightCubeShader.setVec3("lightColor", lightColor);
         lightCubeShader.setMat4("projection", projection);
         lightCubeShader.setMat4("view", view);
-        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::mat4(1.0f);
         model = glm::translate(model, lightPos);
         model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
         lightCubeShader.setMat4("model", model);
@@ -347,3 +313,40 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
     camera.ProcessMouseScroll(static_cast<float>(yoffset));
 }
 
+// Helper to load textures using stbi_load.
+unsigned int loadTexture(char const* path)
+{
+    unsigned int textureID;
+    glGenTextures(1, &textureID);
+
+    int width, height, nrComponents;
+    unsigned char* data = stbi_load(path, &width, &height, &nrComponents, 0);
+    if (data)
+    {
+        GLenum format;
+        if (nrComponents == 1)
+            format = GL_RED;
+        else if (nrComponents == 3)
+            format = GL_RGB;
+        else if (nrComponents == 4)
+            format = GL_RGBA;
+
+        glBindTexture(GL_TEXTURE_2D, textureID);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        stbi_image_free(data);
+    }
+    else
+    {
+        std::cout << "Texture failed to load at path: " << path << std::endl;
+        stbi_image_free(data);
+    }
+
+    return textureID;
+}

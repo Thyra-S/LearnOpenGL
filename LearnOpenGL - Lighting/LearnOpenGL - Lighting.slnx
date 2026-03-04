@@ -6,4 +6,5 @@
   <Project Path="01Colors/01Colors.vcxproj" Id="47326ca5-f338-4b98-bb05-1a2d7d87f204" />
   <Project Path="02BasicLighting/02BasicLighting.vcxproj" Id="cb6d5f7d-4973-4fdc-9730-a2df5dfdeca6" />
   <Project Path="03Materials/03Materials.vcxproj" Id="ee84ef09-1410-4fdb-81fa-874a20031ca5" />
+  <Project Path="04LightingMaps/04LightingMaps.vcxproj" Id="454ed1f1-5f5b-491a-a1dd-caedc8033726" />
 </Solution>
