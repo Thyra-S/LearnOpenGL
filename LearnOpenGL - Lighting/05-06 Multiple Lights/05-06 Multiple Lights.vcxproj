@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{ee84ef09-1410-4fdb-81fa-874a20031ca5}</ProjectGuid>
-    <RootNamespace>My03Materials</RootNamespace>
+    <ProjectGuid>{dc2741a2-dbb2-4dbf-bbb5-f531a191a93d}</ProjectGuid>
+    <RootNamespace>My0506MultipleLights</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -132,14 +132,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="materialLighting.vert" />
-    <None Include="materialLighting.frag" />
+    <Image Include="container2.png" />
+    <Image Include="container2_specular.png" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="lightCube.frag" />
     <None Include="lightCube.vert" />
+    <None Include="multipleLights.frag" />
+    <None Include="multipleLights.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c" />
-    <ClCompile Include="Materials.cpp" />
+    <ClCompile Include="MultipleLights.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

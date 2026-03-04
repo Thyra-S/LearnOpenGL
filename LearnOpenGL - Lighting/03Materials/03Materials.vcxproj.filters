@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="basicLighting.vert">
+    <None Include="materialLighting.vert">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="basicLightingBox.frag">
+    <None Include="materialLighting.frag">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="lightCube.frag">

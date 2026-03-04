@@ -15,16 +15,24 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="lightCube.vert">
+    <Image Include="container2.png">
       <Filter>Resource Files</Filter>
-    </None>
+    </Image>
+    <Image Include="container2_specular.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="lightCube.frag">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="lightingMaps.frag">
+    <None Include="lightCube.vert">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="lightingMaps.vert">
+    <None Include="multipleLights.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="multipleLights.vert">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
@@ -32,16 +40,8 @@
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LightingMaps.cpp">
+    <ClCompile Include="MultipleLights.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="container2.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="container2_specular.png">
-      <Filter>Resource Files</Filter>
-    </Image>
   </ItemGroup>
 </Project>
