@@ -8,4 +8,5 @@
   <Project Path="03Materials/03Materials.vcxproj" Id="ee84ef09-1410-4fdb-81fa-874a20031ca5" />
   <Project Path="04LightingMaps/04LightingMaps.vcxproj" Id="454ed1f1-5f5b-491a-a1dd-caedc8033726" />
   <Project Path="05-06 Multiple Lights/05-06 Multiple Lights.vcxproj" Id="dc2741a2-dbb2-4dbf-bbb5-f531a191a93d" />
+  <Project Path="ModelLoading/ModelLoading.vcxproj" Id="14344d84-33f3-43dd-9801-4b8494e7aa58" />
 </Solution>
