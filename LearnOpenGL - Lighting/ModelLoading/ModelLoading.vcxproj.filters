@@ -38,6 +38,9 @@
     <None Include="modelLoading.frag">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="resources\objects\hatsune_miku.glb">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\objects\backpack\ao.jpg">

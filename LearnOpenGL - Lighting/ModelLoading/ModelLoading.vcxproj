@@ -141,6 +141,7 @@
     <None Include="modelLoading.frag" />
     <None Include="modelLoading.vert" />
     <None Include="resources\objects\backpack\backpack.mtl" />
+    <None Include="resources\objects\hatsune_miku.glb" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\objects\backpack\ao.jpg" />

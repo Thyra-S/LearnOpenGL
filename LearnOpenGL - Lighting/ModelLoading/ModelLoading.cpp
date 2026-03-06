@@ -105,6 +105,40 @@ int main()
 
         // don't forget to enable shader before setting uniforms
         modelShader.use();
+        modelShader.setVec3("viewPos", camera.Position);
+
+        // light properties
+        glm::vec3 lightColor;
+        lightColor.x = static_cast<float>(sin(glfwGetTime() * 2.0));
+        lightColor.y = static_cast<float>(sin(glfwGetTime() * 0.7));
+        lightColor.z = static_cast<float>(sin(glfwGetTime() * 1.3));
+        glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f); // decrease the influence
+        glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
+
+        // directional light
+        modelShader.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
+        modelShader.setVec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
+        modelShader.setVec3("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
+        modelShader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
+        // point light 1
+        modelShader.setVec3("pointLights[0].position", 5.0f, 5.0f,5.0f);
+        modelShader.setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
+        modelShader.setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
+        modelShader.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+        modelShader.setFloat("pointLights[0].constant", 1.0f);
+        modelShader.setFloat("pointLights[0].linear", 0.09f);
+        modelShader.setFloat("pointLights[0].quadratic", 0.032f);
+        // spotlight
+        modelShader.setVec3("spotLight.position", camera.Position);
+        modelShader.setVec3("spotLight.direction", camera.Front);
+        modelShader.setVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
+        modelShader.setVec3("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
+        modelShader.setVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
+        modelShader.setFloat("spotLight.constant", 1.0f);
+        modelShader.setFloat("spotLight.linear", 0.09f);
+        modelShader.setFloat("spotLight.quadratic", 0.032f);
+        modelShader.setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
+        modelShader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
 
         // view/projection transformations
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);

@@ -130,12 +130,16 @@ private:
 			vector<Texture> specularMaps = loadMaterialTextures(material,
 				aiTextureType_SPECULAR, "texture_specular");
 			textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+			vector<Texture> emissiveMaps = loadMaterialTextures(material,
+				aiTextureType_EMISSIVE, "texture_emission");
+			textures.insert(textures.end(), emissiveMaps.begin(), emissiveMaps.end());
+			
 		}
 
 		return Mesh(vertices, indices, textures);
 	}
 
-	// Helper functions to lo
+	// Helper functions to load material textures
 	vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName)
 	{
 		vector<Texture> textures;

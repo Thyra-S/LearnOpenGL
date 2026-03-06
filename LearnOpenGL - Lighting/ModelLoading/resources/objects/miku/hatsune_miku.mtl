@@ -1,0 +1,85 @@
+# MTL file - created by a modified js OBJExporter
+
+newmtl skin
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000
+illum 1
+Ni 0.98
+Pl 1
+Prfl 1
+Ka 1 1 1
+Kd 1 1 1
+Ke 0 0 0
+map_Kd skin.png
+
+newmtl dress
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000
+illum 1
+Ni 0.98
+Pl 1
+Prfl 1
+Ka 1 1 1
+Kd 1 1 1
+Ke 0 0 0
+map_Kd dress.png
+
+newmtl earphones_mic
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000
+illum 1
+Ni 0.98
+Pl 1
+Prfl 1
+Ka 1 1 1
+Kd 1 1 1
+Ke 0 0 0
+map_Kd earphones_mic.png
+
+newmtl eyelashes
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000
+illum 1
+Ni 0.98
+Pl 1
+Prfl 1
+Ka 1 1 1
+Kd 1 1 1
+Ke 0 0 0
+map_Kd eyelashes.png
+
+newmtl eyes_teeth_tongue
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000
+illum 1
+Ni 0.98
+Pl 1
+Prfl 1
+Ka 1 1 1
+Kd 1 1 1
+Ke 0 0 0
+map_Kd eyes_teeth_tongue.png
+
+newmtl hair_base
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000
+illum 1
+Ni 0.98
+Pl 1
+Prfl 1
+Ka 1 1 1
+Kd 1 1 1
+Ke 0 0 0
+map_Kd hair_base.png
+
+newmtl pants_sleeves
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000
+illum 1
+Ni 0.98
+Pl 1
+Prfl 1
+Ka 1 1 1
+Kd 1 1 1
+Ke 0 0 0
+map_Kd pants_sleeves.png
