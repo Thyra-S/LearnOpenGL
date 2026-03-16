@@ -136,7 +136,7 @@ vec3 CalcSpotLight(SpotLight light, vec3 norm, vec3 FragPos, vec3 viewDir)
     // combine results
     vec3 emission = texture(texture_emission1, TexCoords).rgb;
     vec3 ambient = light.ambient * vec3(texture(texture_diffuse1, TexCoords));
-    vec3 diffuse = light.diffuse * diff * vec3(texture(texture_diffuse1, TexCoords));
+    vec3 diffuse = light.diffuse * diff * vec3(texture(texture_emission1, TexCoords));
     // vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
 
     ambient *= attenuation * intensity;
