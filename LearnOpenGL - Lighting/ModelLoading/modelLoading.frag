@@ -34,8 +34,18 @@ struct SpotLight{
     float linear;
     float quadratic;
 };
+
+struct Material{
+    sampler2D diffuse;
+    sampler2D specular;
+    float shininess;
+    };
+
 uniform sampler2D texture_diffuse1;
 uniform sampler2D texture_emission1;
+uniform sampler2D texture_specular1;
+
+uniform Material material;
 
 uniform DirLight dirLight;
 #define NR_POINT_LIGHTS 1  
@@ -78,14 +88,15 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
     // diffuse shading
     float diff = max(dot(normal, lightDir), 0.0);
     // specular shading
-    //vec3 reflectDir = reflect(-lightDir, normal);
-    // float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+    vec3 reflectDir = reflect(-lightDir, normal);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
 
     vec3 emission = texture(texture_emission1, TexCoords).rgb;
     // combine results
     vec3 ambient  = light.ambient  * vec3(texture(texture_diffuse1, TexCoords));
     vec3 diffuse  = light.diffuse  * diff * vec3(texture(texture_diffuse1, TexCoords));
-    //vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
+    vec3 specular = light.specular * spec * vec3(texture(texture_specular1, TexCoords));
+
     return (ambient + diffuse + emission); // + specular);
 }  
 

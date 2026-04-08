@@ -28,7 +28,7 @@ class Model
 {
 public:
 	// model data 
-	vector<Texture> textures_loaded;	// stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
+	std::unordered_map<unsigned int, Texture> textures_loaded;	// stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
 	vector<Mesh>    meshes;
 	string directory;
 	bool gammaCorrection;
@@ -151,7 +151,7 @@ private:
 			bool skip = false;
 			for (unsigned int j = 0; j < textures_loaded.size(); j++)
 			{
-				if (std::strcmp(textures_loaded[j].path.data(), str.C_Str()) == 0)
+				if (textures_loaded.contains(j))
 				{
 					textures.push_back(textures_loaded[j]);
 					skip = true;
@@ -165,7 +165,7 @@ private:
 				texture.type = typeName;
 				texture.path = str.C_Str();
 				textures.push_back(texture);
-				textures_loaded.push_back(texture); // add to loaded textures
+				textures_loaded.insert(std::make_pair(texture.id, texture)); // add to loaded textures
 			}
 		}
 		return textures;

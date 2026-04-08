@@ -83,7 +83,6 @@ int main()
 
     Model ourModel("resources/objects/backpack/backpack.obj", false);
 
-    
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
