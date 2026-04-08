@@ -13,15 +13,8 @@ uniform mat4 projection;
 
 void main()
 {
-    // 1. Pass texture coordinates directly
     TexCoords = aTexCoords;    
-    
-    // 2. Calculate the position of the vertex in actual World Space
     FragPos = vec3(model * vec4(aPos, 1.0));
-    
-    // 3. Pass the normals (using a Normal Matrix to prevent them from breaking if you scale your object)
     Normal = mat3(transpose(inverse(model))) * aNormal;  
-    
-    // 4. Final screen position
     gl_Position = projection * view * vec4(FragPos, 1.0);
 }
